@@ -38,3 +38,8 @@ Tienes a disposición un Apoyo Desafío - Mi Repertorio con la aplicación clien
 2. Entra por terminal a la carpeta "backend"
 3. Instala las dependencias con "npm install"
 4. Ejecuta "npm run dev" para levantar el backend. Ambos servicios correrán en http://localhost:5000/
+
+
+#### Adicionales / Opcionales
+
+- Fue integrado **Swagger** para documentar y testear API directo desde http://localhost:5000/api-docs
