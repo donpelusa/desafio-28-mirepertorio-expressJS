@@ -8,16 +8,18 @@ La escuela de música “E-Sueño” está motivando a sus estudiantes de canto 
 En este desafío deberás desarrollar un servidor con Express que utilice el módulo File System para agregar, modificar y eliminar canciones almacenadas en un JSON local llamado repertorio.json.
 El servidor deberá disponibilizar las siguientes rutas:
 
-● **POST /canciones :** Recibe los datos correspondientes a una canción y la agrega al repertorio.
-● **GET /canciones :** Devuelve un JSON con las canciones registradas en el repertorio
-● **PUT /canciones/:id :** Recibe los datos de una canción que se desea editar y la actualiza manipulando el JSON local.
-● **DELETE /canciones/:id :** Recibe por queryString el id de una canción y la elimina del repertorio.
+- **POST /canciones :** Recibe los datos correspondientes a una canción y la agrega al repertorio.
+- **GET /canciones :** Devuelve un JSON con las canciones registradas en el repertorio
+- **PUT /canciones/:id :** Recibe los datos de una canción que se desea editar y la actualiza manipulando el JSON local.
+- **DELETE /canciones/:id :** Recibe por queryString el id de una canción y la elimina del repertorio.
 
 Tienes a disposición un Apoyo Desafío - Mi Repertorio con la aplicación cliente que se muestra en la siguiente imagen, lista para el consumo de estas rutas, por lo que deberás enfocarte solo en el desarrollo backend.
 
-<p style="text-align:center;">
-    <img src="https://github.com/user-attachments/assets/4cd921cb-5ff8-4f87-a251-c25ea746d693"></br>
-    <b>Imagen 1. Aplicación Mi repertorio</b> </br>
+</br>
+<p style="text-align: center"><img src="https://github.com/user-attachments/assets/4cd921cb-5ff8-4f87-a251-c25ea746d693">
+    </br>
+    <b>Imagen 1. Aplicación Mi repertorio</b>
+    </br>
     <i>Fuente: Desafío Latam</i>
 </p>
 
