@@ -1,6 +1,6 @@
 import express from "express";
 import { nanoid } from "nanoid";
-import { writeFile, readFile } from "node:fs/promises";
+import { writeFileSync, readFileSync } from "fs";
 import cors from "cors";
 
 /* Test Swagger */
@@ -52,7 +52,7 @@ app.listen(5000, () => {
 
 // AUXILIARES
 const getCanciones = async () => {
-    const fsResponse = await readFile("canciones.json", "utf-8");
+    const fsResponse = await readFileSync("canciones.json", "utf-8");
     const canciones = JSON.parse(fsResponse);
     return canciones;
 };
@@ -135,22 +135,30 @@ app.get("/canciones/:id", async (req, res) => {
  * /canciones:
  *   post:
  *     summary: Agregar una nueva canción
+ *     description: Agrega una nueva canción al repertorio. Todos los campos son obligatorios y deben contener al menos 1 carácter.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - cancion
+ *               - artista
+ *               - tono
  *             properties:
  *               cancion:
  *                 type: string
+ *                 description: Nombre de la canción
  *               artista:
  *                 type: string
+ *                 description: Artista de la canción
  *               tono:
  *                 type: string
+ *                 description: Tono de la canción
  *     responses:
  *       201:
- *         description: Canción agregada
+ *         description: Canción agregada con éxito
  *         content:
  *           application/json:
  *             schema:
@@ -158,32 +166,63 @@ app.get("/canciones/:id", async (req, res) => {
  *               properties:
  *                 id:
  *                   type: string
+ *                   description: Identificador único de la canción
  *                 cancion:
  *                   type: string
+ *                   description: Nombre de la canción
  *                 artista:
  *                   type: string
+ *                   description: Artista de la canción
  *                 tono:
  *                   type: string
+ *                   description: Tono de la canción
+ *       400:
+ *         description: Error de validación. Todos los campos son obligatorios.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Detalle del error
  */
+
 app.post("/canciones", async (req, res) => {
     const { cancion, artista, tono } = req.body;
+
+    // Validación: Verificar que los campos no estén vacíos
+    if (
+        !cancion || cancion.trim().length < 1 ||
+        !artista || artista.trim().length < 1 ||
+        !tono || tono.trim().length < 1
+    ) {
+        return res.status(400).json({
+            message: "Todos los campos (cancion, artista, tono) son obligatorios y deben contener al menos 1 carácter.",
+        });
+    }
+
     const nuevaCancion = {
         id: nanoid(),
-        cancion,
-        artista,
-        tono,
+        cancion: cancion.trim(),
+        artista: artista.trim(),
+        tono: tono.trim(),
     };
+
     let canciones = await getCanciones();
     canciones.push(nuevaCancion);
-    await writeFile("canciones.json", JSON.stringify(canciones));
+
+    await writeFileSync("canciones.json", JSON.stringify(canciones, null, 3));
     res.status(201).json(nuevaCancion);
 });
+
 
 /**
  * @swagger
  * /canciones/{id}:
  *   put:
  *     summary: Actualizar una canción por ID
+ *     description: Actualiza una canción en el repertorio. Todos los campos enviados deben contener al menos 1 carácter válido. Los campos no enviados no serán actualizados.
  *     parameters:
  *       - in: path
  *         name: id
@@ -200,16 +239,16 @@ app.post("/canciones", async (req, res) => {
  *             properties:
  *               cancion:
  *                 type: string
- *                 description: Nombre de la canción
+ *                 description: Nombre de la canción. Debe tener al menos 1 carácter.
  *               artista:
  *                 type: string
- *                 description: Artista de la canción
+ *                 description: Artista de la canción. Debe tener al menos 1 carácter.
  *               tono:
  *                 type: string
- *                 description: Tono de la canción
+ *                 description: Tono de la canción. Debe tener al menos 1 carácter.
  *     responses:
  *       200:
- *         description: Canción actualizada
+ *         description: Canción actualizada con éxito
  *         content:
  *           application/json:
  *             schema:
@@ -217,32 +256,62 @@ app.post("/canciones", async (req, res) => {
  *               properties:
  *                 id:
  *                   type: string
+ *                   description: ID de la canción
  *                 cancion:
  *                   type: string
+ *                   description: Nombre actualizado de la canción
  *                 artista:
  *                   type: string
+ *                   description: Artista actualizado de la canción
  *                 tono:
  *                   type: string
+ *                   description: Tono actualizado de la canción
+ *       400:
+ *         description: Error de validación. Todos los campos enviados deben contener al menos 1 carácter.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Detalle del error de validación
  *       404:
  *         description: Canción no encontrada
  */
+
 app.put("/canciones/:id", async (req, res) => {
     const id = req.params.id;
     const { cancion, artista, tono } = req.body;
+
+    // Validar que los campos no estén vacíos
+    if (
+        (cancion !== undefined && cancion.trim().length < 1) ||
+        (artista !== undefined && artista.trim().length < 1) ||
+        (tono !== undefined && tono.trim().length < 1)
+    ) {
+        return res.status(400).json({
+            message: "Todos los campos (cancion, artista, tono) deben contener al menos 1 carácter si se envían.",
+        });
+    }
+
     let canciones = await getCanciones();
     const cancionIndex = canciones.findIndex((cancion) => cancion.id === id);
 
     if (cancionIndex === -1) {
         res.status(404).json({ message: "Canción no encontrada" });
     } else {
-        if (cancion !== undefined) canciones[cancionIndex].cancion = cancion;
-        if (artista !== undefined) canciones[cancionIndex].artista = artista;
-        if (tono !== undefined) canciones[cancionIndex].tono = tono;
+        // Actualizar solo los campos que se envían y son válidos
+        if (cancion !== undefined) canciones[cancionIndex].cancion = cancion.trim();
+        if (artista !== undefined) canciones[cancionIndex].artista = artista.trim();
+        if (tono !== undefined) canciones[cancionIndex].tono = tono.trim();
 
-        await writeFile("canciones.json", JSON.stringify(canciones));
+        // Guardar los cambios en el archivo
+        await writeFileSync("canciones.json", JSON.stringify(canciones, null, 3));
         res.json(canciones[cancionIndex]);
     }
 });
+
 
 /**
  * @swagger
@@ -271,7 +340,7 @@ app.delete("/canciones/:id", async (req, res) => {
         res.status(404).json({ message: "Canción no encontrada" });
     } else {
         const cancionEliminada = canciones.splice(cancionIndex, 1);
-        await writeFile("canciones.json", JSON.stringify(canciones));
+        await writeFileSync("canciones.json", JSON.stringify(canciones, null, 3));
         res.json(cancionEliminada[0]);
     }
 });

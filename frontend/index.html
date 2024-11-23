@@ -122,20 +122,34 @@
     tono.value = "";
   }
 
-  function nuevaCancion() {
-    cancion;
-    artista;
-    tono;
-    const id = Math.floor(Math.random() * 9999)
+function nuevaCancion() {
+    // Validar que los campos no estén vacíos
+    if (
+        cancion.value.trim().length < 1 ||
+        artista.value.trim().length < 1 ||
+        tono.value.trim().length < 1
+    ) {
+        alert("Todos los campos son obligatorios y deben contener al menos 1 carácter.");
+        return;
+    }
+
+    // Generar un ID aleatorio
+    const id = Math.floor(Math.random() * 9999);
+
+    // Crear objeto de datos
     let data = {
-      id,
-      cancion: cancion.value,
-      artista: artista.value,
-      tono: tono.value,
+        id,
+        cancion: cancion.value.trim(),
+        artista: artista.value.trim(),
+        tono: tono.value.trim(),
     };
+
     console.log(data);
+
+    // Enviar los datos al backend
     axios.post(url, data).then(() => getData());
-  }
+}
+
 
   function eliminarCancion(i, id) {
     axios.delete(url + "/" + id).then(() => {
@@ -156,17 +170,32 @@
   }
 
   function editarCancion(id) {
+    // Validar que los campos no estén vacíos
+    if (
+        cancion.value.trim().length < 1 ||
+        artista.value.trim().length < 1 ||
+        tono.value.trim().length < 1
+    ) {
+        alert("Todos los campos son obligatorios y deben contener al menos 1 carácter.");
+        return;
+    }
+
+    // Enviar la actualización al backend
     axios
-      .put(url + "/" + id, {
-        id,
-        cancion: cancion.value,
-        artista: artista.value,
-        tono: tono.value,
-      })
-      .then(() => {
-        getData();
-        document.getElementById("agregar").style.display = "block";
-        document.getElementById("editar").style.display = "none";
-      });
-  }
+        .put(url + "/" + id, {
+            id,
+            cancion: cancion.value.trim(),
+            artista: artista.value.trim(),
+            tono: tono.value.trim(),
+        })
+        .then(() => {
+            // Recargar la lista de canciones
+            getData();
+
+            // Restaurar la visibilidad de los botones
+            document.getElementById("agregar").style.display = "block";
+            document.getElementById("editar").style.display = "none";
+        });
+}
+
 </script>
