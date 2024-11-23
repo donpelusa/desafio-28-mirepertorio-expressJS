@@ -8,10 +8,10 @@ La escuela de música “E-Sueño” está motivando a sus estudiantes de canto 
 En este desafío deberás desarrollar un servidor con Express que utilice el módulo File System para agregar, modificar y eliminar canciones almacenadas en un JSON local llamado repertorio.json.
 El servidor deberá disponibilizar las siguientes rutas:
 
-    ● POST /canciones : Recibe los datos correspondientes a una canción y la agrega al repertorio.
-    ● GET /canciones : Devuelve un JSON con las canciones registradas en el repertorio
-    ● PUT /canciones/:id : Recibe los datos de una canción que se desea editar y la actualiza manipulando el JSON local.
-    ● DELETE /canciones/:id : Recibe por queryString el id de una canción y la elimina del repertorio.
+● **POST /canciones :** Recibe los datos correspondientes a una canción y la agrega al repertorio.
+● **GET /canciones :** Devuelve un JSON con las canciones registradas en el repertorio
+● **PUT /canciones/:id :** Recibe los datos de una canción que se desea editar y la actualiza manipulando el JSON local.
+● **DELETE /canciones/:id :** Recibe por queryString el id de una canción y la elimina del repertorio.
 
 Tienes a disposición un Apoyo Desafío - Mi Repertorio con la aplicación cliente que se muestra en la siguiente imagen, lista para el consumo de estas rutas, por lo que deberás enfocarte solo en el desarrollo backend.
 
@@ -23,16 +23,16 @@ Tienes a disposición un Apoyo Desafío - Mi Repertorio con la aplicación clien
 
 #### Requerimientos
 
-    1. Levantar un servidor local usando Express Js
-    2. Devolver una página web como respuesta a una consulta GET
-    3. Ofrecer diferentes rutas con diferentes métodos HTTP que permitan las operaciones CRUD de datos alojados en un archivo JSON local
-    4. Manipular los parámetros obtenidos en la URL
-    5. Manipular el payload de una consulta HTTP al servidor
+1. Levantar un servidor local usando Express Js
+2. Devolver una página web como respuesta a una consulta GET
+3. Ofrecer diferentes rutas con diferentes métodos HTTP que permitan las operaciones CRUD de datos alojados en un archivo JSON local
+4. Manipular los parámetros obtenidos en la URL
+5. Manipular el payload de una consulta HTTP al servidor
 
 
 #### Forma de uso
 
-    1. Clona el repositorio a una carpeta local a través de GIT
-    2. Entra por terminal a la carpeta "backend"
-    3. Instala las dependencias con "npm install"
-    4. Ejecuta "npm run dev" para levantar el backend. Ambos servicios correrán en http://localhost:5000/
+1. Clona el repositorio a una carpeta local a través de GIT
+2. Entra por terminal a la carpeta "backend"
+3. Instala las dependencias con "npm install"
+4. Ejecuta "npm run dev" para levantar el backend. Ambos servicios correrán en http://localhost:5000/
